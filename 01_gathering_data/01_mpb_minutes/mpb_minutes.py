@@ -11,8 +11,6 @@ Original file is located at
 ## 1. 한국은행 금융통화위원회 의사록
 """
 
-!pip install pdfplumber
-
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlretrieve
@@ -28,7 +26,7 @@ def get_mpb_minutes(start_date = '2008-04-01', end_date = '2022-11-15'):
     url = 'https://www.bok.or.kr/portal/bbs/B0000245/list.do?menuNo=200761&searchWrd=&searchCnd=1' 
     headers = {'user-agent' : 'Mozilla/5.0'}
     page = 1
-    text = ""
+    texts = []
 
     while True:
         params = f'&sdate={start_date}&edate={end_date}&pageIndex={str(page)}'
@@ -46,26 +44,24 @@ def get_mpb_minutes(start_date = '2008-04-01', end_date = '2022-11-15'):
                 os.makedirs('/content/temp')
                 urlretrieve(download_link, '/content/temp/temp.pdf')
 
+                text = ""
                 with pdfplumber.open('/content/temp/temp.pdf') as f:
                     pages = f.pages      
                     for pg in pages[1:]:
                         text += pg.extract_text().replace('\n', '')
                         text = re.sub('- \d+ -', '', text)
                 shutil.rmtree('/content/temp')
+                texts.append(text)
             page += 1
         else: break
 
-    return text
+    return texts
 
-text = get_mpb_minutes()
+texts = get_mpb_minutes()
 
 with open('/content/mpb_minutes.txt', 'w') as f:
-	f.write(text)
-
-
-
-from google.colab import drive
-drive.mount('/content/drive')
+    for text in texts:
+        f.write(text + '\t')
 
 
 
