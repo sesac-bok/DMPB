@@ -2,3 +2,5 @@
 temp.pdf
 01_gathering_data/05._naver_news/bok/__pycache__
 01_gathering_data/05._naver_news/bok/spiders/__pycache__
+01_gathering_data/05._naver_news/bok_scrapy/__pycache__
+01_gathering_data/05._naver_news/bok_scrapy/spiders/__pycache__
