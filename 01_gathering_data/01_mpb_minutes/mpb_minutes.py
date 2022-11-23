@@ -43,7 +43,6 @@ def get_mpb_minutes(start_date = '2008-04-01', end_date = '2022-11-15'):
             date_list = soup.select('span.titlesub')
             page_dates = [date.text.split(')')[1].replace('(','') for date in date_list]
             dates.append(page_dates)
-            print(dates)
             
             aTag_list = soup.select('.fileGoupBox a')
             href_list = [aTag.attrs['href'] for aTag in aTag_list if '.pdf' in aTag.attrs['title']] 
@@ -67,90 +66,7 @@ def get_mpb_minutes(start_date = '2008-04-01', end_date = '2022-11-15'):
     dates = sum(dates, [])          
     return dates, texts
 
-# def get_mpb_minutes(start_date = '2008-04-01', end_date = '2022-11-15'):
-    
-#     url = 'https://www.bok.or.kr/portal/bbs/B0000245/list.do?menuNo=200761&searchWrd=&searchCnd=1' 
-#     headers = {'user-agent' : 'Mozilla/5.0'}
-#     page = 1
-#     texts = []
-#     dates = []
-
-#     while True:
-#         params = f'&sdate={start_date}&edate={end_date}&pageIndex={str(page)}'
-#         resp = requests.get(url + params, headers = headers)
-#         soup = bs(resp.text, 'lxml')
-#         end_page = soup.select('.schTotal span')[-1].text.split('/')[1].replace('pages', '')
-        
-#         if page <= int(end_page):
-#             print(f'{page}번째 페이지 크롤링')
-#             date_list = soup.select('span.titlesub')
-#             page_dates = [date.text.split(')')[1].replace('(','') for date in date_list]
-#             dates.append(page_dates)
-#             print(dates)
-            
-#             aTag_list = soup.select('.fileGoupBox a')
-#             href_list = [aTag.attrs['href'] for aTag in aTag_list if '.pdf' in aTag.attrs['title']] 
-#             for href in href_list:
-#                 print(href)
-#                 download_link = 'https://www.bok.or.kr' + href
-#                 os.makedirs('/content/temp')
-#                 urlretrieve(download_link, '/content/temp/temp.pdf')
-
-#                 text = ""
-#                 with pdfplumber.open('/content/temp/temp.pdf') as f:
-#                     pages = f.pages      
-#                     for pg in pages[1:]:
-#                         text += pg.extract_text().replace('\n', '')
-#                         text = re.sub('- \d+ -', '', text)
-#                 shutil.rmtree('/content/temp')
-#                 texts.append(text)
-#             page += 1
-#         else: break
-            
-#     dates = sum(dates, [])          
-#     return dates, texts
-
-# def get_mpb_minutes(start_date = '2008-04-01', end_date = '2022-11-15'):
-    
-#     url = 'https://www.bok.or.kr/portal/bbs/B0000245/list.do?menuNo=200761&searchWrd=&searchCnd=1' 
-#     headers = {'user-agent' : 'Mozilla/5.0'}
-#     page = 1
-#     texts = []
-
-#     while True:
-#         params = f'&sdate={start_date}&edate={end_date}&pageIndex={str(page)}'
-#         resp = requests.get(url + params, headers = headers)
-#         soup = bs(resp.text, 'lxml')
-#         end_page = soup.select('.schTotal span')[-1].text.split('/')[1].replace('pages', '')
-        
-#         if page <= int(end_page):
-#             print(f'{page}번째 페이지 크롤링')
-#             aTag_list = soup.select('.fileGoupBox a')
-#             href_list = [aTag.attrs['href'] for aTag in aTag_list if '.pdf' in aTag.attrs['title']] 
-#             for href in href_list:
-#                 print(href)
-#                 download_link = 'https://www.bok.or.kr' + href
-#                 os.makedirs('/content/temp')
-#                 urlretrieve(download_link, '/content/temp/temp.pdf')
-
-#                 text = ""
-#                 with pdfplumber.open('/content/temp/temp.pdf') as f:
-#                     pages = f.pages      
-#                     for pg in pages[1:]:
-#                         text += pg.extract_text().replace('\n', '')
-#                         text = re.sub('- \d+ -', '', text)
-#                 shutil.rmtree('/content/temp')
-#                 texts.append(text)
-#             page += 1
-#         else: break
-
-#     return texts
-
 dates, texts = get_mpb_minutes()
-
-dates
-
-texts
 
 with open('/content/mpb_minutes.txt', 'w') as f:
     for idx in range(len(dates)):
@@ -166,13 +82,4 @@ minutes_df = data_to_df('/content/mpb_minutes.txt')
 minutes_df.drop(index=300, axis=0, inplace=True)
 minutes_df
 
-minutes_df.to_csv('minutes_df.csv')
-
-
-
-
-
-
-
-
-
+minutes_df.to_csv('minutes_df.csv', index=False)
