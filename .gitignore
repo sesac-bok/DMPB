@@ -1,4 +1,8 @@
 .ipynb_checkpoints/
+<<<<<<< HEAD
 temp.pdf
 01_gathering_data/05._naver_news/bok/__pycache__
 01_gathering_data/05._naver_news/bok/spiders/__pycache__
+=======
+temp.pdf
+>>>>>>> 6ce4e419a86f27388d8dbc04dd396fd54378d8ae
